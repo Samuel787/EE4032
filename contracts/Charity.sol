@@ -37,7 +37,7 @@ contract Charity {
 
     modifier checkForStaleRequest() {
         _;
-        if(block.timestamp - lastVoteEndTime > 12 hours) {
+        if(block.timestamp - lastVoteEndTime > 36 hours) {
             purgeRequest(getWinningRequestAddress());
         }
     }

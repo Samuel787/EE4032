@@ -153,11 +153,14 @@ describe("Charity Contract", () => {
       assert(web3.eth.getBalance(accounts[4]) > web3.utils.toWei('105'));
     });
 
-    it("requester's request should be able removed", async ()=> {
-      
+    it("requester's request should be able removed after withdraw", async ()=> {
+
     });
 
     it("donors should be removed after withdrawal of winning request", async()=>{})
+
+    it("stale request should be removed",async()=>{})
+
 
     it("donors should be able to vote again if winning request is a stale request",async()=>{})
 
