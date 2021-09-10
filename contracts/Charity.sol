@@ -28,7 +28,7 @@ contract Charity {
         lastVoteEndTime = block.timestamp;
     }
     
-    function donate() public payable{
+    function donate() public payable checkForStaleRequest{
         require(msg.value > 0.01 ether, 'you have to donate more than 0.01 ETH!');
         donors.push(msg.sender);
         donatedAmount[msg.sender] = msg.value;
@@ -63,7 +63,7 @@ contract Charity {
     }
 
 
-    function new_request(uint256 requested_amount, string memory _proof) external {
+    function new_request(uint256 requested_amount, string memory _proof) external checkForStaleRequest{
         require(requests[msg.sender].amount_requested == 0); // the person should not have put up a request before
         Request memory request = Request({ requester: msg.sender, amount_requested: requested_amount, proof: _proof});
         requests[msg.sender] = request;
@@ -74,7 +74,7 @@ contract Charity {
         // }
     }
 
-    function voteForRequest(address requester_addr) public {
+    function voteForRequest(address requester_addr) external checkForStaleRequest{
         require(requests[requester_addr].amount_requested != 0, "request does not exist"); // ensure that request for the corresponding requestor exists
         require(donorVote[msg.sender] == address(0), "you have already voted"); // check that donor has not voted for anyone yet
         donorVote[msg.sender] = requester_addr; // add voting for donor
