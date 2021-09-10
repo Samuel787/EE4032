@@ -30,7 +30,7 @@
       v-bind:ethers="ethers"
     />
     <div v-for="request in requests" :key="request">
-      <div>
+      <div v-if="request[0] != 0">
         <div v-if="winningRequest && winningRequest[0] == request[0]">
           This is the currently winning request!
         </div>
@@ -63,7 +63,7 @@ export default {
       ethers: ethers,
       provider: undefined,
       userAddress: undefined,
-      contractAddress: "0xcD545c67E62ed0c8Cd0fa4015Aaf237549021054",
+      contractAddress: "0x6d6cd2D017114e9e803bf86Af5909dF81109d4b5",
       contract: undefined,
       contractBalance: undefined,
       donateAmount: 1,
