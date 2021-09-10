@@ -37,8 +37,9 @@ contract Charity {
 
     modifier checkForStaleRequest() {
         _;
-        if(block.timestamp - lastVoteEndTime > 36 hours) {
+        if(block.timestamp - lastVoteEndTime > 7 minutes) {
             purgeRequest(getWinningRequestAddress());
+            lastVoteEndTime = block.timestamp;
         }
     }
 
@@ -130,12 +131,12 @@ contract Charity {
     }
 
     function getWinningRequestAddress() public view returns(address) {
-        uint highestDonors = 0;
+        uint highestVotes = 0;
         address winningRequestAddr;
         for (uint i = 0; i < requesters.length; i++) {
             address[] memory requestDonors = requestorDonors[requesters[i]];
-            if (requestDonors.length > highestDonors) {
-                highestDonors = requestDonors.length;
+            if (requesters[i] > address(0) && requestDonors.length > highestVotes) {
+                highestVotes = requestDonors.length;
                 winningRequestAddr = requesters[i];
             } 
         }
@@ -144,7 +145,7 @@ contract Charity {
     }
 
     function withdraw() external {
-        require(block.timestamp - lastVoteEndTime > 24 hours, "the round has not ended yet!");
+        require(block.timestamp - lastVoteEndTime > 5 minutes, "the round has not ended yet!");
         address winningAddress =  getWinningRequestAddress();
         require(getWinningRequestAddress() == msg.sender, 'You do not have the most votes this round :('); 
         uint256 requestedAmount = requests[winningAddress].amount_requested;
@@ -155,7 +156,7 @@ contract Charity {
         }
         purgeRequest(winningAddress);
         purgeDonors(winningAddress);
-        lastVoteEndTime += 24 hours;
+        lastVoteEndTime += 5 minutes;
     }
     
 }

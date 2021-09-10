@@ -2,7 +2,7 @@
   <div class="New Request">
     <div>Submit a new request for {{ address }}</div>
     <div>
-      Request Amouunt
+      Request Amount
       <input
         type="number"
         step=".01"
