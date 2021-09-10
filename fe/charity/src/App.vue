@@ -63,7 +63,7 @@ export default {
       ethers: ethers,
       provider: undefined,
       userAddress: undefined,
-      contractAddress: "0xcD545c67E62ed0c8Cd0fa4015Aaf237549021054 ",
+      contractAddress: "0xcD545c67E62ed0c8Cd0fa4015Aaf237549021054",
       contract: undefined,
       contractBalance: undefined,
       donateAmount: 1,
