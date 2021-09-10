@@ -161,7 +161,6 @@ describe("Charity Contract", () => {
 
     it("stale request should be removed",async()=>{})
 
-
     it("donors should be able to vote again if winning request is a stale request",async()=>{})
 
     it("donors should able to donate and vote again for another request",async()=>{})
