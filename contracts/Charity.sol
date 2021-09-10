@@ -18,7 +18,7 @@ contract Charity {
 
     address[] public donors; // entire history of donators
     mapping(address => uint256) public donatedAmount; // donor to donated amount mapping
-    uint256 lastVoteEndTime ;
+    uint256 public lastVoteEndTime ;
     address[] public requesters; // entire history of requestors
     mapping(address => Request) public requests; // requestor to request mapping
     mapping(address => address) public donorVote; // donor to request mapping
@@ -28,7 +28,7 @@ contract Charity {
         lastVoteEndTime = block.timestamp;
     }
     
-    function donate() public payable checkForStaleRequest{
+    function donate() external payable checkForStaleRequest{
         require(msg.value > 0.01 ether, 'you have to donate more than 0.01 ETH!');
         donors.push(msg.sender);
         donatedAmount[msg.sender] = msg.value;
@@ -64,7 +64,7 @@ contract Charity {
 
 
     function new_request(uint256 requested_amount, string memory _proof) external checkForStaleRequest{
-        require(requests[msg.sender].amount_requested == 0); // the person should not have put up a request before
+        require(requests[msg.sender].amount_requested == 0, "You already have a submitted request!"); // the person should not have put up a request before
         Request memory request = Request({ requester: msg.sender, amount_requested: requested_amount, proof: _proof});
         requests[msg.sender] = request;
         requesters.push(msg.sender);
@@ -85,6 +85,10 @@ contract Charity {
         return requestorDonors[requester].length;
     }
 
+
+    function getLastVoteEndTime() public view returns(uint256) {
+        return lastVoteEndTime;
+    }
 
     // Todo remove duplicate requestors fom the map i.e keep track of repeated reqs and dont show. Had to be unique
     function getRequests() public view returns (ReturnedRequestData[] memory) {
@@ -151,6 +155,7 @@ contract Charity {
         }
         purgeRequest(winningAddress);
         purgeDonors(winningAddress);
+        lastVoteEndTime += 24 hours;
     }
     
 }

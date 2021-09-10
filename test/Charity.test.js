@@ -164,6 +164,9 @@ describe("Charity Contract", () => {
 
     it("donors should be able to vote again if winning request is a stale request",async()=>{})
 
-    it("donation excess after withdrawal should be used for the next winning request",async()=>{})
+    it("donors should able to donate and vote again for another request",async()=>{})
+
+    it("2nd winning requester should be able to be paid out",async()=>{})
+
   });
 });
