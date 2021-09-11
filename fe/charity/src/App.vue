@@ -9,10 +9,26 @@
         Winning address can withdraw between: {{ withdrawStart }} and
         {{ withdrawEnd }}
       </div>
-      <div v-if="new Date() > withdrawEnd && requests && requests.length > 0 && winningRequest">The winning request can now be purged!
+      <div
+        v-if="
+          new Date() > withdrawEnd &&
+          requests &&
+          requests.length > 0 &&
+          winningRequest
+        "
+      >
+        The winning request can now be purged!
         <button @click="purge">Click here to purge it</button>
       </div>
-      <div v-if="new Date() > withdrawEnd && requests && requests.length > 0 && !winningRequest">Start a new request to begin a new round!
+      <div
+        v-if="
+          new Date() > withdrawEnd &&
+          requests &&
+          requests.length > 0 &&
+          !winningRequest
+        "
+      >
+        Start a new request to begin a new round!
       </div>
       <button @click="donate">Donate</button>
       <input
@@ -45,7 +61,7 @@
         {{ ethers.utils.formatEther(request[1]) }} Ether for the purpose of
         {{ request[2] }}
         has {{ request[3] }} vote(s)
-        <button @click="vote(request[0])" v-if='voteEligible'>Vote</button>
+        <button @click="vote(request[0])" v-if="voteEligible">Vote</button>
       </div>
     </div>
     <p>Frontend built by Lucas Foo</p>
@@ -68,7 +84,7 @@ export default {
       ethers: ethers,
       provider: undefined,
       userAddress: undefined,
-      contractAddress: "0x6a96b630840Bda9688Fdd5F71D75F838eDe5060D",
+      contractAddress: "0x3D8fb48AC24E171F350e626646cbD866B31600C5",
       contract: undefined,
       contractBalance: undefined,
       donateAmount: 1,
@@ -109,19 +125,23 @@ export default {
       this.voteEligible = donatedAmount > 0.1 && this.donorVote == 0;
       const lastVoteEndTime = await this.contract.getLastVoteEndTime();
       this.lastRoundDate = new Date(lastVoteEndTime.toNumber() * 1000);
-      this.withdrawStart = moment(this.lastRoundDate).add(5, "minutes");
-      this.withdrawEnd = moment(this.lastRoundDate).add(7, "minutes");
+      this.withdrawStart = moment(this.lastRoundDate).add(24, "hours");
+      this.withdrawEnd = moment(this.lastRoundDate).add(36, "hours");
       this.timeRemaining = moment(this.lastRoundDate)
-        .add(5, "minutes")
+        .add(24, "hours")
         .fromNow();
       if (this.requests && this.requests.length > 0)
         this.winningRequest = await this.contract.getWinningRequest();
-      console.log(this.winningRequest)
-      if(this.winningRequest && this.winningRequest[0] == this.userAddress && new Date() > this.withdrawStart)
-        this.showWithdraw = true
-      console.log(this.requests.map(request => request[0]))
-      console.log(this.requests.sort(((a,b)=> a[3]>b[3])))
-      console.log(this.requests)
+      console.log(this.winningRequest);
+      if (
+        this.winningRequest &&
+        this.winningRequest[0] == this.userAddress &&
+        new Date() > this.withdrawStart
+      )
+        this.showWithdraw = true;
+      console.log(this.requests.map((request) => request[0]));
+      console.log(this.requests.sort((a, b) => a[3] > b[3]));
+      console.log(this.requests);
     },
     donate: async function () {
       const signer = this.provider.getSigner();
@@ -150,7 +170,7 @@ export default {
           res.hash;
       });
     },
-    purge: async function() {
+    purge: async function () {
       const signer = this.provider.getSigner();
       const contract = this.contract.connect(signer);
       contract.purgeStaleRequest();
@@ -159,10 +179,10 @@ export default {
       const signer = this.provider.getSigner();
       const contract = this.contract.connect(signer);
       contract.withdraw();
-    }, 
+    },
   },
   mounted() {
-    this.enableMetamask()
+    this.enableMetamask();
   },
 };
 </script>

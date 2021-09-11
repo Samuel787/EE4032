@@ -37,7 +37,7 @@ contract Charity {
     }
 
     function purgeStaleRequest() public {
-        require(block.timestamp - lastVoteEndTime > 7 minutes);
+        require(block.timestamp - lastVoteEndTime > 36 hours);
         purgeDonors(getWinningRequestAddress());
         purgeRequest(getWinningRequestAddress());
         lastVoteEndTime = block.timestamp;
@@ -81,7 +81,7 @@ contract Charity {
         //     requestMapping[msg.sender] = request;
         //     requesters.push(msg.sender);
         // }
-        if(block.timestamp > lastVoteEndTime + 7 minutes) {
+        if(block.timestamp > lastVoteEndTime + 36 hours) {
             lastVoteEndTime = block.timestamp;
         }
     }
@@ -171,7 +171,7 @@ contract Charity {
 
     function withdraw() external {
         require(
-            block.timestamp - lastVoteEndTime > 5 minutes,
+            block.timestamp - lastVoteEndTime > 24 hours,
             "the round has not ended yet!"
         );
         address winningAddress = getWinningRequestAddress();
@@ -187,6 +187,6 @@ contract Charity {
         }
         purgeDonors(winningAddress);
         purgeRequest(winningAddress);
-        lastVoteEndTime = block.timestamp + 5 minutes;
+        lastVoteEndTime = block.timestamp + 24 hours;
     }
 }
