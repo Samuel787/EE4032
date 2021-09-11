@@ -9,6 +9,7 @@
         Winning address can withdraw between: {{ withdrawStart }} and
         {{ withdrawEnd }}
       </div>
+      <div v-if="new Date() > withdrawEnd && request.length > 0">The winning request can now be purged! Donate any amount/ put a new request to purge it.</div>
       <button @click="donate">Donate</button>
       <input
         type="number"
@@ -40,7 +41,7 @@
         {{ ethers.utils.formatEther(request[1]) }} Ether for the purpose of
         {{ request[2] }}
         has {{ request[3] }} vote(s)
-        <button @click="vote(request[0])" v-if="voteEligible">Vote</button>
+        <button @click="vote(request[0])" v-if='voteEligible'>Vote</button>
       </div>
     </div>
     <p>Frontend built by Lucas Foo</p>
@@ -63,7 +64,7 @@ export default {
       ethers: ethers,
       provider: undefined,
       userAddress: undefined,
-      contractAddress: "0x4f6AE0B4118a260E81578cc810d34ff572b5d3f1",
+      contractAddress: "0xdA5489Dd49feCdBa0F03AE361413457Bd49e6a24",
       contract: undefined,
       contractBalance: undefined,
       donateAmount: 1,
@@ -114,6 +115,7 @@ export default {
       console.log(this.winningRequest)
       if(this.winningRequest[0] == this.userAddress && new Date() > this.withdrawStart)
         this.showWithdraw = true
+      console.log(this.requests.map(request => request[0]))
     },
     donate: async function () {
       const signer = this.provider.getSigner();
