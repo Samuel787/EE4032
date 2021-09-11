@@ -66,7 +66,7 @@ export default {
       ethers: ethers,
       provider: undefined,
       userAddress: undefined,
-      contractAddress: "0x8Ea4254ca1c3b75BbA116239F353244bdCCa6249",
+      contractAddress: "0xb06F04317C022077cfCaDC2543d245e20CdBd5aA",
       contract: undefined,
       contractBalance: undefined,
       donateAmount: 1,
@@ -119,6 +119,7 @@ export default {
         this.showWithdraw = true
       console.log(this.requests.map(request => request[0]))
       console.log(this.requests.sort(((a,b)=> a[3]>b[3])))
+      console.log(this.requests)
     },
     donate: async function () {
       const signer = this.provider.getSigner();

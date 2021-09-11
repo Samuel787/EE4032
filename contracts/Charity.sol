@@ -60,7 +60,7 @@ contract Charity {
                 delete donorVote[currentDonors[i]];
             }
         }
-        delete requestorDonors[requester];
+        // delete requestorDonors[requester];
     }
 
     function new_request(uint256 requested_amount, string memory _proof)
