@@ -27,7 +27,7 @@ contract Charity {
         lastVoteEndTime = block.timestamp;
     }
 
-    function donate() external payable checkForStaleRequest {
+    function donate() external payable {
         require(
             msg.value > 0.01 ether,
             "you have to donate more than 0.01 ETH!"
@@ -36,13 +36,11 @@ contract Charity {
         donatedAmount[msg.sender] = msg.value;
     }
 
-    modifier checkForStaleRequest() {
-        _;
-        if (block.timestamp - lastVoteEndTime > 7 minutes) {
-            purgeRequest(getWinningRequestAddress());
-            purgeDonors(getWinningRequestAddress());
-            lastVoteEndTime = block.timestamp;
-        }
+    function purgeStaleRequest() public {
+        require(block.timestamp - lastVoteEndTime > 7 minutes);
+        purgeRequest(getWinningRequestAddress());
+        purgeDonors(getWinningRequestAddress());
+        lastVoteEndTime = block.timestamp;
     }
 
     function getNumberOfRequests() public view returns (uint256) {
@@ -67,7 +65,6 @@ contract Charity {
 
     function new_request(uint256 requested_amount, string memory _proof)
         external
-        checkForStaleRequest
     {
         require(
             requests[msg.sender].amount_requested == 0,
@@ -84,11 +81,13 @@ contract Charity {
         //     requestMapping[msg.sender] = request;
         //     requesters.push(msg.sender);
         // }
+        if(block.timestamp > lastVoteEndTime + 7 minutes) {
+            lastVoteEndTime = block.timestamp;
+        }
     }
 
     function voteForRequest(address requester_addr)
         external
-        checkForStaleRequest
     {
         require(
             requests[requester_addr].amount_requested != 0,
@@ -188,6 +187,6 @@ contract Charity {
         }
         purgeRequest(winningAddress);
         purgeDonors(winningAddress);
-        lastVoteEndTime += 5 minutes;
+        lastVoteEndTime = block.timestamp + 5 minutes;
     }
 }

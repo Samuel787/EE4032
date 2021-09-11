@@ -9,7 +9,9 @@
         Winning address can withdraw between: {{ withdrawStart }} and
         {{ withdrawEnd }}
       </div>
-      <div v-if="new Date() > withdrawEnd && request && request.length > 0">The winning request can now be purged! Donate any amount/ put a new request to purge it.</div>
+      <div v-if="new Date() > withdrawEnd && requests && requests.length > 0">The winning request can now be purged!
+        <button @click="purge">Click here to purge it</button>
+      </div>
       <button @click="donate">Donate</button>
       <input
         type="number"
@@ -64,7 +66,7 @@ export default {
       ethers: ethers,
       provider: undefined,
       userAddress: undefined,
-      contractAddress: "0x7c95B9cc03A58FA3C8167EE512E1d342f6517E3B",
+      contractAddress: "0x8Ea4254ca1c3b75BbA116239F353244bdCCa6249",
       contract: undefined,
       contractBalance: undefined,
       donateAmount: 1,
@@ -116,6 +118,7 @@ export default {
       if(this.winningRequest && this.winningRequest[0] == this.userAddress && new Date() > this.withdrawStart)
         this.showWithdraw = true
       console.log(this.requests.map(request => request[0]))
+      console.log(this.requests.sort(((a,b)=> a[3]>b[3])))
     },
     donate: async function () {
       const signer = this.provider.getSigner();
@@ -144,11 +147,16 @@ export default {
           res.hash;
       });
     },
+    purge: async function() {
+      const signer = this.provider.getSigner();
+      const contract = this.contract.connect(signer);
+      contract.purgeStaleRequest();
+    },
     withdraw: async function () {
       const signer = this.provider.getSigner();
       const contract = this.contract.connect(signer);
       contract.withdraw();
-    },
+    }, 
   },
   mounted() {
     this.enableMetamask()
