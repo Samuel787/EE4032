@@ -9,7 +9,7 @@
         Winning address can withdraw between: {{ withdrawStart }} and
         {{ withdrawEnd }}
       </div>
-      <div v-if="new Date() > withdrawEnd && request.length > 0">The winning request can now be purged! Donate any amount/ put a new request to purge it.</div>
+      <div v-if="new Date() > withdrawEnd && request && request.length > 0">The winning request can now be purged! Donate any amount/ put a new request to purge it.</div>
       <button @click="donate">Donate</button>
       <input
         type="number"
@@ -110,10 +110,10 @@ export default {
       this.timeRemaining = moment(this.lastRoundDate)
         .add(5, "minutes")
         .fromNow();
-      if (this.requests.length > 0)
+      if (this.requests && this.requests.length > 0)
         this.winningRequest = await this.contract.getWinningRequest();
       console.log(this.winningRequest)
-      if(this.winningRequest[0] == this.userAddress && new Date() > this.withdrawStart)
+      if(this.winningRequest && this.winningRequest[0] == this.userAddress && new Date() > this.withdrawStart)
         this.showWithdraw = true
       console.log(this.requests.map(request => request[0]))
     },
