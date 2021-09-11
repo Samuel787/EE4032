@@ -9,8 +9,10 @@
         Winning address can withdraw between: {{ withdrawStart }} and
         {{ withdrawEnd }}
       </div>
-      <div v-if="new Date() > withdrawEnd && requests && requests.length > 0">The winning request can now be purged!
+      <div v-if="new Date() > withdrawEnd && requests && requests.length > 0 && winningRequest">The winning request can now be purged!
         <button @click="purge">Click here to purge it</button>
+      </div>
+      <div v-if="new Date() > withdrawEnd && requests && requests.length > 0 && !winningRequest">Start a new request to begin a new round!
       </div>
       <button @click="donate">Donate</button>
       <input
