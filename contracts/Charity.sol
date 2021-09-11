@@ -40,6 +40,7 @@ contract Charity {
         _;
         if (block.timestamp - lastVoteEndTime > 7 minutes) {
             purgeRequest(getWinningRequestAddress());
+            purgeDonors(getWinningRequestAddress());
             lastVoteEndTime = block.timestamp;
         }
     }
@@ -51,7 +52,6 @@ contract Charity {
     function purgeRequest(address requester) private {
         delete requests[requester];
         delete requestorDonors[requester];
-        purgeDonors(requester);
     }
 
     function purgeDonors(address requester) private {
