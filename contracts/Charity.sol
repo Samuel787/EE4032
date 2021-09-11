@@ -38,8 +38,8 @@ contract Charity {
 
     function purgeStaleRequest() public {
         require(block.timestamp - lastVoteEndTime > 7 minutes);
-        purgeRequest(getWinningRequestAddress());
         purgeDonors(getWinningRequestAddress());
+        purgeRequest(getWinningRequestAddress());
         lastVoteEndTime = block.timestamp;
     }
 
@@ -185,8 +185,8 @@ contract Charity {
         } else {
             payable(msg.sender).transfer(address(this).balance);
         }
-        purgeRequest(winningAddress);
         purgeDonors(winningAddress);
+        purgeRequest(winningAddress);
         lastVoteEndTime = block.timestamp + 5 minutes;
     }
 }
